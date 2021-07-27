@@ -3,4 +3,6 @@
     <string name="main_title">Pet Diary</string>
     <string name="btn_login">Login</string>
     <string name="btn_join">Join</string>
+    <string name="btn_doen">확인</string>
+    <string name="btn_back">뒤로가기</string>
 </resources>
