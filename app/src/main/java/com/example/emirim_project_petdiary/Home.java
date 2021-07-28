@@ -16,9 +16,11 @@ public class Home extends AppCompatActivity {
 
         ImageView imgNote = findViewById(R.id.btn_note);
         ImageView imgAdd = findViewById(R.id.btn_add);
+        ImageView imgBack = findViewById(R.id.btn_back);
 
         imgNote.setOnClickListener(imgListener);
         imgAdd.setOnClickListener(imgListener);
+        imgBack.setOnClickListener(imgListener);
     }
 
     View.OnClickListener imgListener = new View.OnClickListener() {
