@@ -14,15 +14,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
 
-        LinearLayout linearLayout = findViewById(R.id.liner_main);
-        linearLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent intent;
-                intent = new Intent(getApplicationContext(), home.class);
-                return false;
-            }
-        });
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Intent intent = new Intent(getApplicationContext(), Home.class);
+        startActivity(intent);
+        return super.onTouchEvent(event);
     }
 }
