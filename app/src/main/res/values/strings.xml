@@ -5,4 +5,5 @@
     <string name="btn_join">Join</string>
     <string name="btn_doen">확인</string>
     <string name="btn_back">뒤로가기</string>
+    <string name="btn_save">저장</string>
 </resources>
