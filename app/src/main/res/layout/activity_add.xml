@@ -56,10 +56,11 @@
 
         <EditText
             android:id="@+id/edit_name"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:layout_marginLeft="60dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -79,10 +80,11 @@
 
         <EditText
             android:id="@+id/edit_age"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:layout_marginLeft="60dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -104,7 +106,8 @@
             android:id="@+id/rg_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="53dp">
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -136,10 +139,11 @@
 
         <EditText
             android:id="@+id/edit_birthday"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:layout_marginLeft="28dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -159,10 +163,11 @@
 
         <EditText
             android:id="@+id/edit_adoptionday"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:layout_marginLeft="28dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -182,10 +187,11 @@
 
         <EditText
             android:id="@+id/edit_species"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:layout_marginLeft="58dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -205,10 +211,11 @@
 
         <EditText
             android:id="@+id/edit_uniqueness"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="100dp"
             android:inputType="text"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:layout_marginLeft="30dp"/>
     </LinearLayout>
 
     <View
