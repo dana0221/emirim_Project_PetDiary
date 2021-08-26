@@ -6,4 +6,6 @@
     <string name="btn_doen">확인</string>
     <string name="btn_back">뒤로가기</string>
     <string name="btn_save">저장</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
