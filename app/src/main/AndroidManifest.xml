@@ -9,8 +9,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Emirim_Project_PetDiary"
-        tools:replace="android:appComponentFactory">
+        android:theme="@style/Theme.Emirim_Project_PetDiary">
         <activity android:name=".Add"></activity>
         <activity android:name=".Diary" />
         <activity android:name=".Home" />
