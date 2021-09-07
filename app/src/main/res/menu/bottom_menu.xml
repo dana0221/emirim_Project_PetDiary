@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_diary"
+        android:icon="@drawable/note"
+        android:enabled="true"
+        android:title="다이어리"/>
+
+    <item
+        android:id="@+id/item_add"
+        android:icon="@drawable/add"
+        android:enabled="true"
+        android:title="반려동물 등록"/>
+
+    <item
+        android:id="@+id/item_setting"
+        android:icon="@drawable/setting"
+        android:enabled="true"
+        android:title="마이페이지"/>
+</menu>

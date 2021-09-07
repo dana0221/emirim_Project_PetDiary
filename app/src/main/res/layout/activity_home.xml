@@ -22,7 +22,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/btn_note"
+                android:id="@+id/btn_diary"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/background_radius"

@@ -14,7 +14,7 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        ImageView imgNote = findViewById(R.id.btn_note);
+        ImageView imgNote = findViewById(R.id.btn_diary);
         ImageView imgAdd = findViewById(R.id.btn_add);
 
         imgNote.setOnClickListener(imgListener);
@@ -26,7 +26,7 @@ public class Home extends AppCompatActivity {
         public void onClick(View v) {
             Intent intent;
             switch (v.getId()){
-                case R.id.btn_note:
+                case R.id.btn_diary:
                     intent = new Intent(getApplicationContext(), Diary.class);
                     startActivity(intent);
                     break;
