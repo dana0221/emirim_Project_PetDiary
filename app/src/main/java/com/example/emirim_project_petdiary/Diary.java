@@ -1,14 +1,24 @@
 package com.example.emirim_project_petdiary;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -17,30 +27,33 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Diary extends AppCompatActivity {
-    ImageView imgBack, img1, img2, img3;
+    final private static String TAG = "태그명";
+    ImageView imgBack, imgv, img2, img3;
     Button btnSave;
     CheckBox checkWalk, checkPlay, checkFeed;
+    final static int TAKE_PICTURE = 1;
+    String mCurrentPhotoPaht;
+    final static int REQUEST_TAKE_PHOTO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
+//        tedPermission();
 
         imgBack = findViewById(R.id.btn_back);
         btnSave = findViewById(R.id.btn_save);
         checkWalk = findViewById(R.id.check_walk);
         checkPlay = findViewById(R.id.check_play);
         checkFeed = findViewById(R.id.check_feed);
-        img1 = findViewById(R.id.img1);
-        img2 = findViewById(R.id.img2);
-        img3 = findViewById(R.id.img3);
-
-//        img1.setOnClickListener(imgListener);
-//        img2.setOnClickListener(imgListener);
-//        img3.setOnClickListener(imgListener);
+        imgv = findViewById(R.id.img1);
+        Button btnPhoto = findViewById(R.id.btn_photo);
 
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +75,27 @@ public class Diary extends AppCompatActivity {
         checkWalk.setOnClickListener(checkListener);
         checkPlay.setOnClickListener(checkListener);
         checkFeed.setOnClickListener(checkListener);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                Log.d(TAG, "권한 설정 완료");
+            }else {
+                Log.d(TAG, "권한 설정 요철");
+            }
+
+            ActivityCompat.requestPermissions(Diary.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.btn_photo:
+                        Intent cameralIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameralIntent, TAKE_PICTURE);
+                        break;
+                }
+            }
+        });
     }
 
     View.OnClickListener checkListener = new View.OnClickListener() {
@@ -81,50 +115,81 @@ public class Diary extends AppCompatActivity {
         }
     };
 
-//    View.OnClickListener imgListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            startActivityForResult(intent, REQUEST_CODE);
-//        }
-//    };
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode== REQUEST_CODE && resultCode==RESULT_OK && data!=null) {
-//            //response에 getData , return data 부분 추가해주어야 한다
-//
-//            selectedImage = data.getData();
-//            Uri photoUri = data.getData();
-//            Bitmap bitmap = null;
-//            //bitmap 이용
-//            try {
-//                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),photoUri);
-//                bitmap = rotateImage(bitmap, 90);
-//                //사진이 돌아가 있는 경우 rotateImage 함수 이용해서 사진 회전 가능
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            //이미지뷰에 이미지 불러오기
-//            img1.setImageBitmap(bitmap);
-//
-//            Cursor cursor = getContentResolver().query(Uri.parse(selectedImage.toString()), null, null, null, null);
-//            assert cursor != null;
-//            cursor.moveToFirst();
-//            String mediaPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-//            Log.d("경로 확인 >> ", "$selectedImg  /  $absolutePath");
-//
-//        }else{
-//            Toast.makeText(this, "사진 업로드 실패", Toast.LENGTH_LONG).show();
-//        }
-//    }
-//
-//    public static Bitmap rotateImage(Bitmap source, float angle) {
-//        Matrix matrix = new Matrix();
-//        matrix.postRotate(angle);
-//        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "onRequestPermissionsResult");
+
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+            Log.d(TAG, "Permission : " + permissions[0] + "was" + grantResults[0]);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try { switch (requestCode) {
+            case REQUEST_TAKE_PHOTO: {
+                if (resultCode == RESULT_OK) {
+                    File file = new File(mCurrentPhotoPaht);
+                    Bitmap bitmap;
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), Uri.fromFile(file));
+                        try {
+                            bitmap = ImageDecoder.decodeBitmap(source);
+                            if (bitmap != null) {
+                                imgv.setImageBitmap(bitmap);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
+                            if (bitmap != null) {
+                                imgv.setImageBitmap(bitmap);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } break;
+            }
+        }
+
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, ".jpg", storageDir
+        );
+
+        mCurrentPhotoPaht = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent(){
+        Intent tackPictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(tackPictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+
+            try {
+                photoFile = createImageFile();
+            }catch (IOException ex){}
+
+            if(photoFile != null){
+                Uri photoURI = FileProvider.getUriForFile(this, "com.example.emirim_test_photo.fileprovider", photoFile);
+                tackPictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(tackPictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
 }
